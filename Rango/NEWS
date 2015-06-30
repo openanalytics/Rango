@@ -1,0 +1,48 @@
+0.3-6
+  o Added option to specify the port of the database server
+0.3-5
+  o Made store database specific, because RETURNING is not supported in sqlite
+0.3-4
+  o store does not perform a seperate retrieve anymore, but uses RETURNING in 
+    the SQL statement
+  o retrieve and store allow you to specify if you want objects, 
+    data.frame or nothing returned
+0.3-3
+  o Added the option to store lists of objects
+0.3-2
+  o Various bug fixes to the join logic
+0.3-1
+  o If joins the objects used in a join specify the fields from the primary key,
+    we will use only the primary key values in the constraints.
+  o Various fixes
+0.3-0
+  o Added support for >, >=, <, <=
+0.2-1
+  o Added support for joins
+0.2-0
+  o Added SQLite support
+  o Arguments to objects can mix lists (of the same length) and other objects.
+0.0-13
+	o Added function loadClasses to get the class definitions in memory without
+	  creating a file
+0.0-12
+	o All generated objects inherit from RangoObject to ease method definitions
+    o Renamed get to retrieve
+    o Renamed save to store
+    o Added support for integer arrays
+    o Added support for text arrays
+0.0-11
+    o Cache other database queries as well
+0.0-10
+    o Fixed issue with default connection parameters
+0.0-9
+    o Added switch for object caching, since the current implementation is crude
+      and will introduce artifacts if the database is changed while using Rango
+0.0-8
+    o Implemented object caching for improved speed
+0.0-7
+    o Now correctly export the RangoConnection class
+0.0-6
+    o get with a list of objects, results in using IN instead of = in SELECT query
+0.0-5
+    o initial release

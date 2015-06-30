@@ -1,0 +1,17 @@
+Rango is an Object Relational Mapper (ORM) for R.
+Currently, Rango only supports Postgres database, patches for other database 
+systems are welcome.
+We do have plans on working on other database systems in the future.
+
+Rango allows you to use R objects to interact with the database in contrast to 
+writing SQL queries and have them executed. Rango currently supports only SELECT
+and INSERT statements. Other query types will be developed later on, but we 
+think the package in its current state is already quite useful.
+
+The main functions are:
+* generateClasses - which generates R object definitions based upon the database 
+ structure
+* retrieve - Performs a SELECT query based upon the current contents of an
+ instance of an object
+* store - Performs an INSERT query based upon the current contents of an
+ instance of an object

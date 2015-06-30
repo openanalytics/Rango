@@ -1,0 +1,30 @@
+Package: Rango
+Type: Package
+Title: Rango creates S4 objects from a database
+Version: 0.3-6
+Date: 2015-06-10
+Author: Willem Ligtenberg
+Maintainer: Willem Ligtenberg <willem.ligtenberg@openanalytics.eu>
+Description: Rango creates S4 objects from a database, the currently supported
+    databases are: PostgreSQL and SQLite.
+License: GPL-3
+Depends:
+    RPostgreSQL,
+    RSQLite
+Imports:
+    DBI,
+    Hmisc,
+    plyr,
+    methods,
+    gdata,
+    logging,
+    Rcpp
+LinkingTo: Rcpp
+Collate:
+    'RangoConnection.R'
+    'GenerateClasses.R'
+    'utils.R'
+    'Rango.R'
+    'sqlite.R'
+    'postgres.R'
+    'RcppExports.R'
