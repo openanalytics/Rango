@@ -127,6 +127,7 @@ setMethod(
     f = "generateClass",
     signature = "RangoSQLiteConnection",
     definition = function(dbc, tableName){
+      logdebug(tableName)
       columnData <- dbGetQuery(dbc@con, statement = 
               paste0("PRAGMA table_info(", tableName, ");"))
       columnData$type <- tolower(columnData$type)
@@ -185,6 +186,7 @@ setMethod(
               "\t}\n",
               "\treturn(tmp)\n}\n", "\n")
       )
+      logdebug(classDefinition)
       return(classDefinition)
     })
     
