@@ -71,6 +71,7 @@ dataType <- function(columnDataRow){
     retVal <- switch(columnDataRow$type, 
         boolean = "logical",
         integer = "numeric",
+        smallint = "numeric",
         real = "numeric",
         text = "character",
         'timestamp with time zone' = "POSIXct",
@@ -154,6 +155,7 @@ setGeneric(
 generateClasses <- function(dbc = rangoConnection(), fileName = "dbClasses.R"){
   codeFile <- file(fileName, "w")  # open an output file connection
   tables <- listTables(dbc)
+  logdebug(tables)
   for(tableName in tables){
     code <- generateClass(dbc, tableName)
     writeLines(code, con = codeFile)
@@ -169,6 +171,7 @@ generateClasses <- function(dbc = rangoConnection(), fileName = "dbClasses.R"){
 loadClasses <- function(dbc){
   code <- ""
   tables <- listTables(dbc)
+  logdebug(tables)
   for(tableName in tables){
     codeBlock <- generateClass(dbc, tableName)
     code <- paste(code, paste(codeBlock, collapse = "\n"), sep = "\n")
