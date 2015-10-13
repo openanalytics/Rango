@@ -130,11 +130,13 @@ setMethod(
             None = NULL)
         # Save the object in the environment
         if(dbc@cache){
-          assign(key, retVal, dbc@objectCache)
+          if(!is.na(retVal) || nrow(retVal) > 0 || !is.null(retVal)){
+            assign(key, retVal, dbc@objectCache)
+          }
         }
         return(retVal)
       } else{
-        return(dbc@objectCache[[query]])
+        return(dbc@objectCache[[key]])
       }
     })
     
@@ -175,11 +177,13 @@ setMethod(
                 None = NULL)
             # Save the object in the environment
             if(dbc@cache){
-              assign(key, retVal, dbc@objectCache)
+              if(!is.na(retVal) || nrow(retVal) > 0 || !is.null(retVal)){
+                assign(key, retVal, dbc@objectCache)
+              }
             }
             return(retVal)
           } else{
-            return(dbc@objectCache[[query]])
+            return(dbc@objectCache[[key]])
           }
         })
 
@@ -299,7 +303,16 @@ setMethod(
       }
       tables <- c(tables, tolower(class(object)))
       if(sql){
-        return(paste(unique(unlist(tables)), collapse = ", "))
+        tmpTables <- c()
+        for(tableName in unlist(tables)){
+          if(tableName %in% tmpTables){
+            #This is an issue if we have more than 2 references to the same table
+            tmpTables <- c(tmpTables, paste0(tableName, " AS ", tableName, "2"))
+          }else{
+            tmpTables <- c(tmpTables, tableName)
+          }
+        }
+        return(paste(tmpTables, collapse = ", "))
       }else{
         return(tables)
       }
@@ -347,14 +360,20 @@ setMethod(
       indexForJoin <- sapply(values, function(x) 
             eval(substitute(inherits(object@x, "RangoObject"), list(x = x))))
       
-      clauses <- c(clauses, lapply(values[indexForJoin], function(x){
-            paste0(tolower(class(object)), ".", x, " = ", 
-                eval(substitute(tolower(class(object@x)), list(x = x))), 
-                ".", getPrimaryKey(dbc, 
-                    eval(substitute(tolower(class(object@x)), 
-                            list(x = x)))))
-          }))
-      # Recurse into the objects
+      tmpTables <- c()
+      for(x in values[indexForJoin]){
+        tableName <- eval(substitute(tolower(class(object@x)), list(x = x)))
+        if(tableName %in% tmpTables){
+          tableName <- paste0(tableName, "2")
+        }
+        tmpTables <- c(tmpTables, tableName)
+        clauses <- c(clauses, paste0(tolower(class(object)), ".", x, " = ", 
+            tableName, ".", getPrimaryKey(dbc, 
+                eval(substitute(tolower(class(object@x)), 
+                        list(x = x))))))
+      }
+      
+      # Recurse into the objects 
       for(i in which(indexForJoin)){
         clauses <- c(clauses, eval(substitute(getJoinClauses(object@x, dbc, sql = FALSE, clauses = clauses), 
                       list(x = values[i]))))
