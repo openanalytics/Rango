@@ -143,6 +143,7 @@ setMethod(
     f = "generateClass",
     signature = "RangoPostgresConnection",
     definition = function(dbc, tableName){
+      logdebug(tableName)
       query <- paste0("SELECT  
               f.attnum AS number,  
               f.attname AS name,  
@@ -220,6 +221,7 @@ setMethod(
               "\t}\n",
               "\treturn(tmp)\n}\n", "\n")
       )
+      logdebug(classDefinition)
       return(classDefinition)
     })
     
